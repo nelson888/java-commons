@@ -3,9 +3,11 @@ package com.tambapps.common;
 import java.io.File;
 import java.io.IOException;
 
-public class FileUtils {
+public final class FileUtils {
 
-  private File newFile(String directory, String name) throws IOException {
+  private FileUtils() {}
+
+  public static File newFile(String directory, String name) throws IOException {
     File file = new File(directory, name);
     if (file.exists()) { //searching available file name
       for (int i = 0; file.exists() && i < 999; i++) {

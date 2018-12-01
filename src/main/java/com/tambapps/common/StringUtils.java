@@ -2,6 +2,8 @@ package com.tambapps.common;
 
 public final class StringUtils {
 
+  private StringUtils() {}
+
   public static String nDigitsNumber(int number, int n) {
     StringBuilder sNumber = new StringBuilder().append(n);
     while (sNumber.length() < n) {
