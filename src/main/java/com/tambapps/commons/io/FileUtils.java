@@ -1,4 +1,6 @@
-package com.tambapps.commons;
+package com.tambapps.commons.io;
+
+import com.tambapps.commons.string.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +9,7 @@ public final class FileUtils {
 
   private FileUtils() {}
 
-  public static File newFile(String directory, String name) throws IOException {
+  public static File newAvailableFile(String directory, String name) throws IOException {
     File file = new File(directory, name);
     if (file.exists()) { //searching available file name
       for (int i = 0; file.exists() && i < 999; i++) {
