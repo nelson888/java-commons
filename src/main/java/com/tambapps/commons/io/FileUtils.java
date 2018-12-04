@@ -1,4 +1,4 @@
-package com.tambapps.common;
+package com.tambapps.commons;
 
 import java.io.File;
 import java.io.IOException;

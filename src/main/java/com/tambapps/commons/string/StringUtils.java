@@ -1,4 +1,4 @@
-package com.tambapps.common;
+package com.tambapps.commons;
 
 public final class StringUtils {
 
