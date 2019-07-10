@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class IOUtils {
+public final class IOUtils {
 
   private IOUtils() {}
 
@@ -25,7 +25,7 @@ public class IOUtils {
     return new BufferedReader(new InputStreamReader(inputStream));
   }
 
-  private BufferedReader getReader(Class thisClass, String resourcePath) {
+  public static BufferedReader newReader(Class thisClass, String resourcePath) {
     return new BufferedReader(new InputStreamReader(thisClass.getResourceAsStream(resourcePath)));
   }
 
