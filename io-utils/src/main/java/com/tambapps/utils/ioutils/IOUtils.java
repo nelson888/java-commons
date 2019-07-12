@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.Reader;
 
 public final class IOUtils {
 
@@ -29,4 +31,16 @@ public final class IOUtils {
     return new BufferedReader(new InputStreamReader(thisClass.getResourceAsStream(resourcePath)));
   }
 
+  public static long nbLines(File file) throws IOException {
+    try (FileReader reader = new FileReader(file)) {
+      return nbLines(reader);
+    }
+  }
+
+  public static long nbLines(Reader reader) throws IOException {
+    try (LineNumberReader lnReader = new LineNumberReader(reader)) {
+      while (lnReader.skip(Long.MAX_VALUE) > 0);
+      return lnReader.getLineNumber();
+    }
+  }
 }
