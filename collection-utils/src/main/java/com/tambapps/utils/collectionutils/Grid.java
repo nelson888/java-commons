@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 //TODO do diagonal iterator
+//TODO store columns/rows in class variables (don't forget to remove Iterator<T> as super interface)
 /**
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
