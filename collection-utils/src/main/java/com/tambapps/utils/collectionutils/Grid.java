@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
-
+//TODO do diagonal iterator
 /**
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
