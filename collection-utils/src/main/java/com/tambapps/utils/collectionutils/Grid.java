@@ -1,16 +1,18 @@
 package com.tambapps.utils.collectionutils;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * A complex 2-dimensional array of size M, N. <br>
+ * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
  */
 @SuppressWarnings("unchecked")
-public class Grid<T> { // TODO make me extends collection and make function toIterable for Column and Row?
+public class Grid<T> implements Collection<T> {
 
-  public interface Vector<T> {
+  public interface Vector<T> extends Iterator<T>, Iterable<T> {
     T getAt(int i);
     void setAt(int i, T value);
     int getSize();
@@ -49,11 +51,11 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
   }
 
   /**
-   * Get the complex number at the index [row][col]
+   * Get the element at the index [row][col]
    *
    * @param row the row
    * @param col the col
-   * @return the complex at the given indexes
+   * @return the element at the given indexes
    */
   public T get(int row, int col) {
     checkIndex(row, col);
@@ -61,11 +63,11 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
   }
 
   /**
-   * Get the complex number at the index i, a 1D index.
+   * Get the element at the index i, a 1D index.
    * i = row * N + col
    *
    * @param i the 1d index
-   * @return the complex at the given index
+   * @return the element at the given index
    */
   public T get(int i) {
     checkIndex(i);
@@ -73,7 +75,7 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
   }
 
   /**
-   * Sets the complex at the index [row][col]
+   * Sets the element at the index [row][col]
    *
    * @param row the row
    * @param col the col
@@ -84,7 +86,7 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
   }
 
   /**
-   * Sets the complex number at the index i, a 1D index.
+   * Sets the element at the index i, a 1D index.
    * i = row * N + col
    *
    * @param i the column index
@@ -191,17 +193,30 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
    * @return the copy
    */
   public Grid<T> copy() {
-    int size = getM() * getN();
     Grid<T> grid = new Grid<>(getM(), getN());
-    System.arraycopy(array, 0, grid.array, 0, size);
+    System.arraycopy(array, 0, grid.array, 0, size());
     return grid;
   }
 
-  private class Column implements Vector<T> {
+  private static abstract class AbstractVector<T> implements Vector<T> {
+
+    @Override
+    public Iterator<T> iterator() {
+      return this;
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
+  private class Column extends AbstractVector<T> {
     final int c;
+    private int i;
 
     Column(int c) {
       this.c = c;
+      this.i = 0;
     }
 
     @Override
@@ -218,13 +233,25 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
     public int getSize() {
       return getM();
     }
+
+    @Override
+    public boolean hasNext() {
+      return i < getN();
+    }
+
+    @Override
+    public T next() {
+      return getAt(i++);
+    }
   }
 
-  private class Row implements Vector<T> {
+  private class Row extends AbstractVector<T> {
     private int r;
+    private int i;
 
     Row(int r) {
       this.r = r;
+      this.i = 0;
     }
 
     @Override
@@ -241,6 +268,132 @@ public class Grid<T> { // TODO make me extends collection and make function toIt
     public int getSize() {
       return getN();
     }
+
+    @Override
+    public boolean hasNext() {
+      return i < getM();
+    }
+
+    @Override public T next() {
+      return getAt(i++);
+    }
   }
 
+  @Override
+  public int size() {
+    return array.length;
+  }
+
+  @Override
+  public boolean isEmpty() {
+    for (int i = 0; i < size(); i++) {
+      if (array[i] != null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  public boolean contains(Object o) {
+    for (int i = 0; i < size(); i++) {
+      if (Objects.equals(o, array[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public Iterator<T> iterator() {
+    return new GridIterator();
+  }
+
+  @Override
+  public Object[] toArray() {
+    Object[] copy = new Object[array.length];
+    System.arraycopy(array, 0, copy, 0, size());
+    return copy;
+  }
+
+  @Override
+  public <T1> T1[] toArray(T1[] a) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean add(T t) {
+    throw new UnsupportedOperationException("Cannot add an element to a Grid");
+  }
+
+  @Override
+  public boolean remove(Object o) {
+    for (int i = 0; i < size(); i++) {
+      if (Objects.equals(o, array[i])) {
+        array[i] = null;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean containsAll(Collection<?> c) {
+    for (Object o : c) {
+      if (!contains(o)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  public boolean addAll(Collection<? extends T> c) {
+    throw new UnsupportedOperationException("Cannot add element to a Grid");
+  }
+
+  @Override
+  public boolean removeAll(Collection<?> c) {
+    boolean changed = false;
+    for (Object o : c) {
+      changed = remove(o) || changed;
+    }
+    return changed;
+  }
+
+  @Override
+  public boolean retainAll(Collection<?> c) {
+    boolean changed = false;
+    for (int i = 0; i < size(); i++) {
+      if (array[i] != null && !c.contains(array[i])) {
+        array[i] = null;
+        changed = true;
+      }
+    }
+    return changed;
+  }
+
+  @Override
+  public void clear() {
+    Arrays.fill(array, null);
+  }
+
+  private class GridIterator implements Iterator<T> {
+    private int i = 0;
+
+    @Override
+    public boolean hasNext() {
+      return i < size();
+    }
+
+    @Override
+    public T next() {
+      return get(i++);
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
 }
