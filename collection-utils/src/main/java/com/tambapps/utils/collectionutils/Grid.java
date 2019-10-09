@@ -4,7 +4,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
-//TODO do diagonal iterator
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 /**
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
@@ -21,6 +25,7 @@ public class Grid<T> implements Collection<T> {
     T getAt(int i);
     void setAt(int i, T value);
     int size();
+    Stream<T> stream();
   }
 
   private final int M; // number of rows
@@ -225,6 +230,12 @@ public class Grid<T> implements Collection<T> {
       return new VectorIterator<>(this);
     }
 
+    @Override
+    public Stream<T> stream() {
+      return StreamSupport.stream(
+          Spliterators.spliterator(iterator(), size(), Spliterator.ORDERED & Spliterator.SIZED),
+          false);
+    }
   }
 
   private static class VectorIterator<T> implements Iterator<T> {
