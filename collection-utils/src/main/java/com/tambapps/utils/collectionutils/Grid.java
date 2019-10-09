@@ -12,6 +12,11 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 public class Grid<T> implements Collection<T> {
 
+  public static final int LEFT = -1;
+  public static final int UP = -1;
+  public static final int RIGHT = - LEFT;
+  public static final int DOWN = - UP;
+
   public interface Vector<T> extends Iterable<T> {
     T getAt(int i);
     void setAt(int i, T value);
@@ -80,7 +85,7 @@ public class Grid<T> implements Collection<T> {
    * @param col the col
    */
   public void set(int row, int col, T value) {
-    array[getIndex(row, col)] = Objects.requireNonNull(value, "Cannot set a null value");
+    array[getIndex(row, col)] = value;
   }
 
   /**
@@ -91,7 +96,7 @@ public class Grid<T> implements Collection<T> {
    */
   public void set(int i, T value) {
     checkIndex(i);
-    array[i] = Objects.requireNonNull(value, "Cannot set a null value");
+    array[i] = value;
   }
 
   private void checkIndex(int row, int col) {
