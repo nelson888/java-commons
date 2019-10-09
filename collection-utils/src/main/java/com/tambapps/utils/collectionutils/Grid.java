@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 //TODO do diagonal iterator
-//TODO store columns/rows in class variables (don't forget to remove Iterator<T> as super interface)
 /**
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
@@ -13,10 +12,10 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 public class Grid<T> implements Collection<T> {
 
-  public interface Vector<T> extends Iterator<T>, Iterable<T> {
+  public interface Vector<T> extends Iterable<T> {
     T getAt(int i);
     void setAt(int i, T value);
-    int getSize();
+    int size();
   }
 
   private final int M; // number of rows
@@ -59,7 +58,6 @@ public class Grid<T> implements Collection<T> {
    * @return the element at the given indexes
    */
   public T get(int row, int col) {
-    checkIndex(row, col);
     return (T) array[getIndex(row, col)];
   }
 
@@ -82,7 +80,6 @@ public class Grid<T> implements Collection<T> {
    * @param col the col
    */
   public void set(int row, int col, T value) {
-    checkIndex(row, col);
     array[getIndex(row, col)] = Objects.requireNonNull(value, "Cannot set a null value");
   }
 
@@ -113,6 +110,7 @@ public class Grid<T> implements Collection<T> {
   }
 
   private int getIndex(int row, int col) {
+    checkIndex(row, col);
     return row * getN() + col;
   }
 
@@ -203,21 +201,41 @@ public class Grid<T> implements Collection<T> {
 
     @Override
     public Iterator<T> iterator() {
-      return this;
+      return new VectorIterator<>(this);
+    }
+
+  }
+
+  private static class VectorIterator<T> implements Iterator<T> {
+    private final Vector<T> vector;
+    private int i;
+
+    private VectorIterator(AbstractVector<T> vector) {
+      this.vector = vector;
+      this.i = 0;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return i < vector.size();
+    }
+
+    @Override
+    public T next() {
+      return vector.getAt(i++);
     }
 
     @Override
     public void remove() {
-      throw new UnsupportedOperationException();
+      vector.setAt(i, null);
     }
   }
+
   private class Column extends AbstractVector<T> {
     final int c;
-    private int i;
 
     Column(int c) {
       this.c = c;
-      this.i = 0;
     }
 
     @Override
@@ -231,28 +249,17 @@ public class Grid<T> implements Collection<T> {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
       return getM();
     }
 
-    @Override
-    public boolean hasNext() {
-      return i < getN();
-    }
-
-    @Override
-    public T next() {
-      return getAt(i++);
-    }
   }
 
   private class Row extends AbstractVector<T> {
     private int r;
-    private int i;
 
     Row(int r) {
       this.r = r;
-      this.i = 0;
     }
 
     @Override
@@ -266,18 +273,10 @@ public class Grid<T> implements Collection<T> {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
       return getN();
     }
 
-    @Override
-    public boolean hasNext() {
-      return i < getM();
-    }
-
-    @Override public T next() {
-      return getAt(i++);
-    }
   }
 
   @Override
@@ -394,7 +393,7 @@ public class Grid<T> implements Collection<T> {
 
     @Override
     public void remove() {
-      throw new UnsupportedOperationException();
+      set(i, null);
     }
   }
 }
