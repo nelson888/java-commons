@@ -212,6 +212,11 @@ public class Grid<T> implements Collection<T> {
     return Arrays.equals(array, a.array);
   }
 
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(array);
+  }
+
   /**
    * Returns a copy of this array
    *
@@ -235,6 +240,35 @@ public class Grid<T> implements Collection<T> {
       return StreamSupport.stream(
           Spliterators.spliterator(iterator(), size(), Spliterator.ORDERED & Spliterator.SIZED),
           false);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof Vector)) {
+        return false;
+      }
+      if (obj == this) {
+        return true;
+      }
+      Vector v = (Vector)obj;
+      if (v.size() != size()) {
+        return false;
+      }
+      for (int i = 0; i < size(); i++) {
+        if (!Objects.equals(getAt(i), v.getAt(i))) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      int hash = 1;
+      for (int i = 0; i < size(); i++) {
+        hash = 31 * hash + Objects.hashCode(getAt(i));
+      }
+      return hash;
     }
   }
 
