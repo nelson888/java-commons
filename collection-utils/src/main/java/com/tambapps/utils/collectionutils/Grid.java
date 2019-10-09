@@ -350,6 +350,10 @@ public class Grid<T> implements Collection<T> {
     return array.length;
   }
 
+  /**
+   * Returns whether this grid contains only null elements
+   * @return true if this grid contains only null elements
+   */
   @Override
   public boolean isEmpty() {
     for (int i = 0; i < size(); i++) {
@@ -377,9 +381,7 @@ public class Grid<T> implements Collection<T> {
 
   @Override
   public Object[] toArray() {
-    Object[] copy = new Object[array.length];
-    System.arraycopy(array, 0, copy, 0, size());
-    return copy;
+    return Arrays.copyOf(array, array.length);
   }
 
   @Override
