@@ -12,6 +12,7 @@ public class GridTest {
   public void rowColumnTests() {
     rowColumnTest(new Grid<>(3, 2));
     rowColumnTest(new Grid<>(10, 10));
+    rowColumnTest(new Grid<>(5, 15));
   }
 
   private void rowColumnTest(Grid<Integer> array) {
@@ -38,6 +39,14 @@ public class GridTest {
     }
   }
 
+  @Test
+  public void copyTest() {
+    Grid<Integer> grid = new Grid<>(6, 6);
+    for (int i = 0; i < grid.size(); i++) {
+      grid.set(i, i);
+    }
+    assertEquals("Should be equal", grid, grid.copy());
+  }
 
 
 }
