@@ -56,6 +56,18 @@ public class Grid<T> implements Collection<T> {
   }
 
   /**
+   * Creates a 2D array of size M, N with the given values.
+   *
+   * @param M      the number of rows
+   * @param N      the number of columns
+   * @param value  the default value of all cells
+   */
+  public Grid(int M, int N, T value) {
+    this(M, N);
+    fill(value);
+  }
+
+  /**
    * Get the element at the index [row][col]
    *
    * @param row the row
@@ -163,6 +175,10 @@ public class Grid<T> implements Collection<T> {
         String.format("Tried to access column %d of array of size (%d, %d)", i, getM(), getN()));
     }
     return new Column(i);
+  }
+
+  public void fill(T value) {
+    Arrays.fill(array, value);
   }
 
   @Override
