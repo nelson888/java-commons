@@ -13,19 +13,7 @@ import java.util.stream.StreamSupport;
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
  */
-public class ArrayGrid<T> implements Collection<T> {
-
-  public static final int LEFT = -1;
-  public static final int UP = -1;
-  public static final int RIGHT = - LEFT;
-  public static final int DOWN = - UP;
-
-  public interface Vector<T> extends Iterable<T> {
-    T getAt(int i);
-    void setAt(int i, T value);
-    int size();
-    Stream<T> stream();
-  }
+public class ArrayGrid<T> implements Grid<T> {
 
   private final int M; // number of rows
   private final int N; // number of columns
@@ -71,47 +59,25 @@ public class ArrayGrid<T> implements Collection<T> {
     fill(value);
   }
 
-  /**
-   * Get the element at the index [row][col]
-   *
-   * @param row the row
-   * @param col the col
-   * @return the element at the given indexes
-   */
+  @Override
   @SuppressWarnings("unchecked")
   public T get(int row, int col) {
     return (T) array[getIndex(row, col)];
   }
 
-  /**
-   * Get the element at the index i, a 1D index.
-   * i = row * N + col
-   *
-   * @param i the 1d index
-   * @return the element at the given index
-   */
+  @Override
   @SuppressWarnings("unchecked")
   public T get(int i) {
     checkIndex(i);
     return (T) array[i];
   }
 
-  /**
-   * Sets the element at the index [row][col]
-   *
-   * @param row the row
-   * @param col the col
-   */
+  @Override
   public void set(int row, int col, T value) {
     array[getIndex(row, col)] = value;
   }
 
-  /**
-   * Sets the element at the index i, a 1D index.
-   * i = row * N + col
-   *
-   * @param i the column index
-   */
+  @Override
   public void set(int i, T value) {
     checkIndex(i);
     array[i] = value;
@@ -137,30 +103,17 @@ public class ArrayGrid<T> implements Collection<T> {
     return row * getN() + col;
   }
 
-  /**
-   * Returns the number of rows
-   *
-   * @return the number of rows
-   */
+  @Override
   public int getM() {
     return M;
   }
 
-  /**
-   * Returns the number of columns
-   *
-   * @return the number of columns
-   */
+  @Override
   public int getN() {
     return N;
   }
 
-  /**
-   * Returns the row at the index i
-   *
-   * @param i the index
-   * @return the i-th row
-   */
+  @Override
   public Vector<T> getRow(int i) {
     if (i >= M) {
       throw new IndexOutOfBoundsException(
@@ -169,12 +122,7 @@ public class ArrayGrid<T> implements Collection<T> {
     return new Row(i);
   }
 
-  /**
-   * Returns the column at the index i
-   *
-   * @param i the index
-   * @return the i-th column
-   */
+  @Override
   public Vector<T> getColumn(int i) {
     if (i >= N) {
       throw new IndexOutOfBoundsException(
@@ -183,6 +131,7 @@ public class ArrayGrid<T> implements Collection<T> {
     return new Column(i);
   }
 
+  @Override
   public void fill(T value) {
     Arrays.fill(array, value);
   }
@@ -202,15 +151,23 @@ public class ArrayGrid<T> implements Collection<T> {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof ArrayGrid)) {
+    if (!(o instanceof Grid)) {
       return false;
     }
-    ArrayGrid a = (ArrayGrid) o;
-    if (a.getM() != getM() || a.getN() != getN()) {
+    if (this.getClass() == o.getClass()) {
+      ArrayGrid a = (ArrayGrid) o;
+      return a.M == M && a.N == N && Arrays.equals(array, a.array);
+    }
+    Grid grid = (Grid) o;
+    if (grid.getM() != getM() || grid.getN() != getN()) {
       return false;
     }
-
-    return Arrays.equals(array, a.array);
+    for (int i = 0; i < size(); i++) {
+      if (get(i) != grid.get(i)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
@@ -218,11 +175,7 @@ public class ArrayGrid<T> implements Collection<T> {
     return Arrays.hashCode(array);
   }
 
-  /**
-   * Returns a copy of this array
-   *
-   * @return the copy
-   */
+  @Override
   public ArrayGrid<T> copy() {
     ArrayGrid<T> grid = new ArrayGrid<>(getM(), getN());
     System.arraycopy(array, 0, grid.array, 0, size());
