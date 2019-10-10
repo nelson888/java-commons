@@ -69,7 +69,6 @@ public class ArrayGridTest {
   @Test
   public void subGridTest() {
     Grid<Integer> grid = newGrid(4, 4);
-    System.out.println(grid);
     assertEquals("Should be equal", grid, grid.subGrid(0, 0, 4, 4));
 
     assertEquals(new ArrayGrid<>(2, 3, 0, 1, 2, 4, 5, 6), grid.subGrid(0, 0, 2, 3));

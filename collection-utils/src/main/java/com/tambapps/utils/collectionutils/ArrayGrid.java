@@ -40,7 +40,9 @@ public class ArrayGrid<T> implements Grid<T> {
    */
   public ArrayGrid(int M, int N, T... values) {
     if (values.length != M * N) {
-      throw new IllegalArgumentException("Array should be of size N * M: " + M * N);
+      throw new IllegalArgumentException(
+          String.format("Array should be of size %d (%d * %d) but got: %d",
+              M * N, M, N, values.length));
     }
     this.M = M;
     this.N = N;
@@ -84,7 +86,7 @@ public class ArrayGrid<T> implements Grid<T> {
   }
 
   private void checkIndex(int row, int col) {
-    if (row < 0 || row >= getM() || col < 0 || col >= getN()) {
+    if (row < 0 || row >= M || col < 0 || col >= N) {
       throw new IndexOutOfBoundsException(String
         .format("Tried to access index (%d, %d) of array of size (%d, %d)", row, col, getM(),
           getN()));
@@ -94,7 +96,7 @@ public class ArrayGrid<T> implements Grid<T> {
   private void checkIndex(int i) {
     if (i < 0 || i >= array.length) {
       throw new IndexOutOfBoundsException(
-        String.format("Tried to access index %d of array of size %d", i, getM() * getN()));
+        String.format("Tried to access index %d of array of size %d", i, M * N));
     }
   }
 
@@ -117,7 +119,7 @@ public class ArrayGrid<T> implements Grid<T> {
   public Vector<T> getRow(int i) {
     if (i >= M) {
       throw new IndexOutOfBoundsException(
-        String.format("Tried to access row %d of array of size (%d, %d)", i, getM(), getN()));
+        String.format("Tried to access row %d of array of size (%d, %d)", i, M, N));
     }
     return new Row(i);
   }
@@ -126,7 +128,7 @@ public class ArrayGrid<T> implements Grid<T> {
   public Vector<T> getColumn(int i) {
     if (i >= N) {
       throw new IndexOutOfBoundsException(
-        String.format("Tried to access column %d of array of size (%d, %d)", i, getM(), getN()));
+        String.format("Tried to access column %d of array of size (%d, %d)", i, M, N));
     }
     return new Column(i);
   }
@@ -139,10 +141,10 @@ public class ArrayGrid<T> implements Grid<T> {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder().append("(")
-      .append(getM()).append(", ").append(getN()).append(")\n");
-    for (int i = 0; i < getN() * getM(); i++) {
+      .append(M).append(", ").append(N).append(")\n");
+    for (int i = 0; i < size(); i++) {
       stringBuilder.append(get(i));
-      stringBuilder.append((i + 1) % getN() == 0 ? "\n" : ",\t");
+      stringBuilder.append((i + 1) % N == 0 ? "\n" : ",\t");
     }
     return stringBuilder.toString();
   }
@@ -157,7 +159,7 @@ public class ArrayGrid<T> implements Grid<T> {
       return a.M == M && a.N == N && Arrays.equals(array, a.array);
     }
     Grid grid = (Grid) o;
-    if (grid.getM() != getM() || grid.getN() != getN()) {
+    if (grid.getM() != M || grid.getN() != N) {
       return false;
     }
     for (int i = 0; i < size(); i++) {
@@ -170,12 +172,12 @@ public class ArrayGrid<T> implements Grid<T> {
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(array);
+    return Objects.hash(M, N, Arrays.hashCode(array));
   }
 
   @Override
   public ArrayGrid<T> copy() {
-    ArrayGrid<T> grid = new ArrayGrid<>(getM(), getN());
+    ArrayGrid<T> grid = new ArrayGrid<>(M, N);
     System.arraycopy(array, 0, grid.array, 0, size());
     return grid;
   }
