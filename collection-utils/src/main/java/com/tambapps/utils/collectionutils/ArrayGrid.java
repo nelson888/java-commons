@@ -8,7 +8,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
+// TODO store rows colums in memory? or implement another version that does it?
 /**
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
