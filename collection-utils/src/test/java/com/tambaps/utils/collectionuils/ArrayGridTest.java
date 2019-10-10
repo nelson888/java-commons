@@ -2,9 +2,15 @@ package com.tambaps.utils.collectionuils;
 
 
 import com.tambapps.utils.collectionutils.ArrayGrid;
+import com.tambapps.utils.collectionutils.Grid;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArrayGridTest {
 
@@ -48,5 +54,17 @@ public class ArrayGridTest {
     assertEquals("Should be equal", grid, grid.copy());
   }
 
+  @Test
+  public void rowColStreamTest() {
+    Grid<Integer> grid = new ArrayGrid<>(2, 2);
+    for (int i = 0; i < grid.size(); i++) {
+      grid.set(i, i);
+    }
+    assertEquals(Arrays.asList(0, 1), grid.getRow(0).stream().collect(Collectors.toList()));
+    assertEquals(Arrays.asList(2, 3), grid.getRow(1).stream().collect(Collectors.toList()));
+    assertEquals(Arrays.asList(0, 2), grid.getColumn(0).stream().collect(Collectors.toList()));
+    assertEquals(Arrays.asList(1, 3), grid.getColumn(1).stream().collect(Collectors.toList()));
+
+  }
 
 }
