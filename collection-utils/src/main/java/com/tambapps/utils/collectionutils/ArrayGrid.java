@@ -134,6 +134,20 @@ public class ArrayGrid<T> implements Grid<T> {
   }
 
   @Override
+  public Stream<Vector<T>> columns() {
+    return StreamSupport.stream(
+        Spliterators.spliterator(new ColumnsIterator(), size(), Spliterator.ORDERED & Spliterator.SIZED),
+        false);
+  }
+
+  @Override
+  public Stream<Vector<T>> rows() {
+    return StreamSupport.stream(
+        Spliterators.spliterator(new RowsIterator(), size(), Spliterator.ORDERED & Spliterator.SIZED),
+        false);
+  }
+
+  @Override
   public void fill(T value) {
     Arrays.fill(array, value);
   }
@@ -431,6 +445,34 @@ public class ArrayGrid<T> implements Grid<T> {
     @Override
     public void remove() {
       set(i, null);
+    }
+  }
+
+  private class ColumnsIterator implements Iterator<Vector<T>> {
+    private int i = 0;
+
+    @Override
+    public boolean hasNext() {
+      return i < getN();
+    }
+
+    @Override
+    public Vector<T> next() {
+      return getColumn(i++);
+    }
+  }
+
+  private class RowsIterator implements Iterator<Vector<T>> {
+    private int i = 0;
+
+    @Override
+    public boolean hasNext() {
+      return i < getM();
+    }
+
+    @Override
+    public Vector<T> next() {
+      return getRow(i++);
     }
   }
 }

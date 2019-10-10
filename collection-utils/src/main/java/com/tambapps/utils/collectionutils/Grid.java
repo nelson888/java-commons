@@ -86,6 +86,10 @@ public interface Grid<T> extends Collection<T> {
    */
   void fill(T value);
 
+  Stream<Vector<T>> columns();
+
+  Stream<Vector<T>> rows();
+
   /**
    * Returns a copy of this array
    *
