@@ -91,7 +91,8 @@ public interface Grid<T> extends Collection<T> {
    *
    * @return the copy
    */
-  ArrayGrid<T> copy();
+  Grid<T> copy();
 
+  Grid<T> subGrid(int i, int j, int M, int N);
 
 }

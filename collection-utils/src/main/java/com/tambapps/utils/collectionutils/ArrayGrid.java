@@ -38,7 +38,7 @@ public class ArrayGrid<T> implements Grid<T> {
    * @param N      the number of columns
    * @param values the values
    */
-  public ArrayGrid(int M, int N, T[] values) {
+  public ArrayGrid(int M, int N, T... values) {
     if (values.length != M * N) {
       throw new IllegalArgumentException("Array should be of size N * M: " + M * N);
     }
@@ -141,10 +141,8 @@ public class ArrayGrid<T> implements Grid<T> {
     StringBuilder stringBuilder = new StringBuilder().append("(")
       .append(getM()).append(", ").append(getN()).append(")\n");
     for (int i = 0; i < getN() * getM(); i++) {
-      stringBuilder.append("(").append(get(i)).append(")\t");
-      if ((i + 1) % getN() == 0) {
-        stringBuilder.append("\n");
-      }
+      stringBuilder.append(get(i));
+      stringBuilder.append((i + 1) % getN() == 0 ? "\n" : ",\t");
     }
     return stringBuilder.toString();
   }
@@ -179,6 +177,21 @@ public class ArrayGrid<T> implements Grid<T> {
   public ArrayGrid<T> copy() {
     ArrayGrid<T> grid = new ArrayGrid<>(getM(), getN());
     System.arraycopy(array, 0, grid.array, 0, size());
+    return grid;
+  }
+
+  @Override
+  public ArrayGrid<T> subGrid(int row, int col, int M, int N) {
+    checkIndex(row, col);
+    if (M > this.M || N > this.N || M - row < 0 || N - col < 0) {
+      throw new IllegalArgumentException(String.format("Cannot create sub grid from (%d, %d) with M=%d, N=%d", row, col, M, N));
+    }
+    ArrayGrid<T> grid = new ArrayGrid<>(M, N);
+    for (int j = 0; j < N; j++) {
+      for (int i = 0; i < M; i++) {
+        grid.set(i, j, get(i + row, j + col));
+      }
+    }
     return grid;
   }
 
