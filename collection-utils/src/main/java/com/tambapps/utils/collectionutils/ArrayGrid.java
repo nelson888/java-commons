@@ -13,8 +13,7 @@ import java.util.stream.StreamSupport;
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
  */
-@SuppressWarnings("unchecked")
-public class Grid<T> implements Collection<T> {
+public class ArrayGrid<T> implements Collection<T> {
 
   public static final int LEFT = -1;
   public static final int UP = -1;
@@ -38,7 +37,7 @@ public class Grid<T> implements Collection<T> {
    * @param M the number of rows
    * @param N the number of columns
    */
-  public Grid(int M, int N) {
+  public ArrayGrid(int M, int N) {
     this.M = M;
     this.N = N;
     array = new Object[M * N];
@@ -51,7 +50,7 @@ public class Grid<T> implements Collection<T> {
    * @param N      the number of columns
    * @param values the values
    */
-  public Grid(int M, int N, T[] values) {
+  public ArrayGrid(int M, int N, T[] values) {
     if (values.length != M * N) {
       throw new IllegalArgumentException("Array should be of size N * M: " + M * N);
     }
@@ -67,7 +66,7 @@ public class Grid<T> implements Collection<T> {
    * @param N      the number of columns
    * @param value  the default value of all cells
    */
-  public Grid(int M, int N, T value) {
+  public ArrayGrid(int M, int N, T value) {
     this(M, N);
     fill(value);
   }
@@ -79,6 +78,7 @@ public class Grid<T> implements Collection<T> {
    * @param col the col
    * @return the element at the given indexes
    */
+  @SuppressWarnings("unchecked")
   public T get(int row, int col) {
     return (T) array[getIndex(row, col)];
   }
@@ -90,6 +90,7 @@ public class Grid<T> implements Collection<T> {
    * @param i the 1d index
    * @return the element at the given index
    */
+  @SuppressWarnings("unchecked")
   public T get(int i) {
     checkIndex(i);
     return (T) array[i];
@@ -201,10 +202,10 @@ public class Grid<T> implements Collection<T> {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof Grid)) {
+    if (!(o instanceof ArrayGrid)) {
       return false;
     }
-    Grid a = (Grid) o;
+    ArrayGrid a = (ArrayGrid) o;
     if (a.getM() != getM() || a.getN() != getN()) {
       return false;
     }
@@ -222,8 +223,8 @@ public class Grid<T> implements Collection<T> {
    *
    * @return the copy
    */
-  public Grid<T> copy() {
-    Grid<T> grid = new Grid<>(getM(), getN());
+  public ArrayGrid<T> copy() {
+    ArrayGrid<T> grid = new ArrayGrid<>(getM(), getN());
     System.arraycopy(array, 0, grid.array, 0, size());
     return grid;
   }
