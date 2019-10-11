@@ -16,21 +16,21 @@ public class ArrayRCGrid<T> extends ArrayGrid<T> {
   public ArrayRCGrid(int M, int N) {
     super(M, N);
     this.rows = new Vector[M];
-    this.columns = new Vector[M];
+    this.columns = new Vector[N];
     initializeRowsCols();
   }
 
   public ArrayRCGrid(int M, int N, T... values) {
     super(M, N, values);
     this.rows = new Vector[M];
-    this.columns = new Vector[M];
+    this.columns = new Vector[N];
     initializeRowsCols();
   }
 
   public ArrayRCGrid(int M, int N, T value) {
     super(M, N, value);
     this.rows = new Vector[M];
-    this.columns = new Vector[M];
+    this.columns = new Vector[N];
     initializeRowsCols();
   }
 
