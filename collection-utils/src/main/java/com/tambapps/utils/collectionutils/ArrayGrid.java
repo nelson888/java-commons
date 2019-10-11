@@ -8,15 +8,15 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-// TODO store rows colums in memory? or implement another version that does it?
+
 /**
  * A 2-dimensional array of size M, N. <br>
  * M is the number of rows, N is the number of columns
  */
 public class ArrayGrid<T> implements Grid<T> {
 
-  private final int M; // number of rows
-  private final int N; // number of columns
+  protected final int M; // number of rows
+  protected final int N; // number of columns
   private final Object[] array; // we store the 2D array in a 1D array of size N * M
 
   /**
