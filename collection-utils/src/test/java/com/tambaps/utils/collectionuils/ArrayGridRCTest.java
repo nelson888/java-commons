@@ -1,16 +1,16 @@
 package com.tambaps.utils.collectionuils;
 
-import com.tambapps.utils.collectionutils.ArrayGrid;
+import com.tambapps.utils.collectionutils.ArrayRCGrid;
 import com.tambapps.utils.collectionutils.Grid;
 
-public class ArrayGridTest extends GridTest {
+public class ArrayGridRCTest extends GridTest {
   @Override
   Grid<Integer> newGrid(int M, int N) {
-    return new ArrayGrid<>(M, N);
+    return new ArrayRCGrid<>(M, N);
   }
 
   @Override
   Grid<Integer> newGrid(int M, int N, Integer... cells) {
-    return new ArrayGrid<>(M, N, cells);
+    return new ArrayRCGrid<>(M, N, cells);
   }
 }
