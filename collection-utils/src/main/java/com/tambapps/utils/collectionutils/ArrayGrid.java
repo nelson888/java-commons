@@ -211,7 +211,7 @@ public class ArrayGrid<T> implements Grid<T> {
     return grid;
   }
 
-  private static abstract class AbstractVector<T> implements Vector<T> {
+  protected static abstract class AbstractVector<T> implements Vector<T> {
 
     @Override
     public Iterator<T> iterator() {

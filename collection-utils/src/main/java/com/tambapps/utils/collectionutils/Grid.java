@@ -5,18 +5,12 @@ import java.util.stream.Stream;
 
 public interface Grid<T> extends Collection<T> {
 
-  int LEFT = -1;
-  int UP = -1;
-  int RIGHT = - LEFT;
-  int DOWN = - UP;
-
   interface Vector<T> extends Iterable<T> {
     T getAt(int i);
     void setAt(int i, T value);
     int size();
     Stream<T> stream();
   }
-
 
   /**
    * Get the element at the index [row][col]
