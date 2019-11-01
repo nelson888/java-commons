@@ -13,6 +13,7 @@
         <module>file-utils</module>
         <module>io-utils</module>
         <module>collection-utils</module>
+        <module>swing-utils</module>
     </modules>
     <packaging>pom</packaging>
 
