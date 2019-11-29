@@ -8,12 +8,23 @@ import java.util.List;
 
 public class PermutationUtils {
 
+  public static <T> List<Vector<T>> generate(Vector<T> vector) {
+    ArrayVector.Builder<T> elements = new ArrayVector.Builder<>(vector.getSize());
+    for (int i = 0; i < vector.getSize(); i++) {
+      elements.setAt(i, vector.getAt(i));
+    }
+    return doGenerate(elements);
+  }
+
   // source: https://www.baeldung.com/java-array-permutations
   public static <T> List<Vector<T>> generate(T... array) {
-    int n = array.length;
-    ArrayVector.Builder<T> elements = new ArrayVector.Builder<>(n);
+    ArrayVector.Builder<T> elements = new ArrayVector.Builder<>(array.length);
     elements.set(array);
+    return doGenerate(elements);
+  }
 
+  public static <T> List<Vector<T>> doGenerate(ArrayVector.Builder<T> elements) {
+    int n = elements.getSize();
     List<Vector<T>> vectors = new ArrayList<>();
     int[] indexes = new int[n];
     for (int i = 0; i < n; i++) {

@@ -7,10 +7,6 @@ public class ArrayVector<T> implements Vector<T> {
 
   private final Object[] objects;
 
-  public ArrayVector(T object) {
-    objects = new Object[] { object };
-  }
-
   private ArrayVector(Object... objects) {
     this.objects = objects;
   }
@@ -131,6 +127,10 @@ public class ArrayVector<T> implements Vector<T> {
 
     public T getAt(int i) {
       return (T) objects[i];
+    }
+
+    public int getSize() {
+      return objects.length;
     }
   }
 }
