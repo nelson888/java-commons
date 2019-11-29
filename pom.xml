@@ -14,11 +14,18 @@
         <module>io-utils</module>
         <module>collection-utils</module>
         <module>swing-utils</module>
+        <module>math-utils</module>
     </modules>
     <packaging>pom</packaging>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.10</version>
+                <scope>provided</scope>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
